@@ -1,0 +1,8 @@
+from PIL import Image, ImageFilter
+import imageio
+import matplotlib.pyplot as plt
+img = imageio.imread('/kaggle/input/validationdata/DATAS/train/freshapples/saltandpepper_Screen Shot 2018-06-08 at 5.18.12 PM.png')
+plt.figure(figsize=(10,10))
+plt.imshow(img)
+shape = img.shape
+ndim =  img.ndim
