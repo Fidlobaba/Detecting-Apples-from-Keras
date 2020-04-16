@@ -1,0 +1,90 @@
+
+import pandas as pd
+import tensorflow as tf
+import logging
+import numpy as np
+import time
+from tensorflow import keras
+from tensorflow.keras import layers
+from tensorflow.keras import Sequential
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout, Activation, BatchNormalization, AveragePooling2D
+from tensorflow.keras.optimizers import SGD, RMSprop, Adam
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+
+import os
+import numpy as np
+from keras.preprocessing.image import  ImageDataGenerator , array_to_img, img_to_array, load_img
+
+datagen = ImageDataGenerator(
+    rotation_range= 40,
+    width_shift_range= 0.2,
+    rescale= 1. / 255,
+    shear_range= 0.2 ,
+    zoom_range= 0.2,
+    horizontal_flip= True,
+    fill_mode= 'nearest')
+
+img = load_img('/kaggle/input/fruits-fresh-and-rotten-for-classification/dataset/dataset/train/rottenbanana/vertical_flip_Screen Shot 2018-06-12 at 8.49.25 PM.png')
+x = img_to_array(img)
+x = x.reshape((1,)+x.shape)
+i =0
+for batch in datagen.flow(x, batch_size=1,
+                         save_to_dir='/kaggle/working', save_prefix='rottenbanana', save_format='png'):
+    i+=1
+    if i > 20:
+        break
+from keras.models import Sequential
+from keras.layers import Conv2D, MaxPooling2D
+from keras.layers import Activation, Dropout, Flatten, Dense
+
+model = Sequential()
+model.add(Conv2D(32, (3, 3), input_shape=( 150, 150, 3)))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+
+
+model.add(Conv2D(32,(3, 3)))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+
+model.add(Conv2D(64,(3, 3)))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=(2,2)))
+
+model.add(Flatten())
+model.add(Dense(64))
+model.add(Activation('relu'))
+model.add(Dropout(0.5))
+model.add(Dense(1))
+model.add(Activation('sigmoid'))
+
+model.compile(loss = 'binary_crossentropy', 
+               optimizer= 'rmsprop',
+               metrics=['accuracy'])
+ 
+ 
+ batch_size = 16
+
+train_datagen =  ImageDataGenerator(
+        rescale=1./255,
+        shear_range=0.2,
+        zoom_range=0.2,
+        horizontal_flip=True)
+test_datagen = ImageDataGenerator(rescale = 1./255)
+
+train_generator = train_datagen.flow_from_directory(
+                     '/kaggle/input/fruits-fresh-and-rotten-for-classification/dataset/train',
+                     target_size= (150, 150),
+                     batch_size=32, 
+                     class_mode = 'binary')
+validation_generator=  test_datagen.flow_from_directory(
+                        '/kaggle/input/validationdata/DATAS/validation',
+                        target_size= (150, 150),
+                        batch_size= 32,
+                        class_mode='binary')
+model.fit_generator(train_generator,
+                    steps_per_epoch=2000 // batch_size,
+                    epochs = 5,
+                    validation_data= validation_generator,
+                    validation_steps = 800 // batch_size,
+                    )
