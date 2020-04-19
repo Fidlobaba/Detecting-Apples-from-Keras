@@ -24,12 +24,12 @@ datagen = ImageDataGenerator(
     horizontal_flip= True,
     fill_mode= 'nearest')
 
-img = load_img('/kaggle/input/fruits-fresh-and-rotten-for-classification/dataset/dataset/train/rottenbanana/vertical_flip_Screen Shot 2018-06-12 at 8.49.25 PM.png')
+img = load_img('/kaggle/input/fruits-fresh-and-rotten-for-classification/dataset/dataset/train/rottenapples/vertical_flip_Screen Shot 2018-06-12 at 8.49.25 PM.png')
 x = img_to_array(img)
 x = x.reshape((1,)+x.shape)
 i =0
 for batch in datagen.flow(x, batch_size=1,
-                         save_to_dir='/kaggle/working', save_prefix='rottenbanana', save_format='png'):
+                         save_to_dir='/kaggle/working', save_prefix='rottenapples', save_format='png'):
     i+=1
     if i > 20:
         break
