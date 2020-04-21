@@ -88,3 +88,13 @@ model.fit_generator(train_generator,
                     validation_data= validation_generator,
                     validation_steps = 800 // batch_size,
                     )
+import matplotlib.pyplot as plt
+loss= history.history['loss']
+val_loss = history.history['val_loss']
+epochs = range(1, len(loss)+1)
+plt.plot(epochs, loss, 'bo', label = "Training loss")
+plt.title('Training and validation loss')
+plt.xlabel('Epochs')
+plt.ylabel('Loss')
+plt.legend()
+plt.show()
