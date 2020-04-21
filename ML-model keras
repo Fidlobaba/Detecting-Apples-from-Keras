@@ -88,6 +88,10 @@ model.fit_generator(train_generator,
                     validation_data= validation_generator,
                     validation_steps = 800 // batch_size,
                     )
+                    
+X_test = '/kaggle/input/validationdata/DATAS/test'
+test = model.predict(validation_generator)
+
 import matplotlib.pyplot as plt
 loss= history.history['loss']
 val_loss = history.history['val_loss']
